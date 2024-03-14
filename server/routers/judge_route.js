@@ -13,7 +13,7 @@ router.use((req, res, next) => {
 router.get("/", async (req, res) => {
   try {
     let courseFound = await Course.find({})
-      .populate("instructor", ["username", "email"])
+      .populate("boss", ["username", "email"])
       .exec();
     return res.send(courseFound);
   } catch (e) {
@@ -22,7 +22,7 @@ router.get("/", async (req, res) => {
 });
 
 // 用老闆id來尋找課程
-router.get('/boss/:_boss_id', async (req,res)=>{
+router.get("/boss/:_boss_id", async (req,res)=>{
    let {_boss_id}=req.params;
    let foundItem=await Course.find({boss:_boss_id})
    .populate("boss",["username","email"])
@@ -31,34 +31,34 @@ router.get('/boss/:_boss_id', async (req,res)=>{
 })
 
 //用成員id 來尋找註冊過的課程
-router.get('/member/:_member_id', async(req,res)=>{
+router.get("/member/:_member_id", async(req,res)=>{
   let {_member_id}=req.params;
-  let foundItem=await Course.find({member:_member_id})
-  .pupulate("boss",["username","email"])
+  let foundItem=await Course.find({students:_member_id})
+  .populate("boss",["username","email"])
   .exec();
   return res.send(foundItem);
 })
 
 //用八卦名稱搜尋課程
-router.get('/findByName/:name',async(req,res)=>{
+router.get("/findByName/:name",async(req,res)=>{
   let {name}=req.params;
   let foundItem=await Course.find({title:name})
-  .populate(boss,[username,email])
+  .populate("boss",["username","email"])
   .exec();
   return res.send(foundItem);
 })
 
 //用課程id搜尋課程
-router.get(':_id',async (req,res)=>{
+router.get("/:_id",async (req,res)=>{
   let {_id} =req.params;
   let foundItem = await Course.find({_id})
-  .populate(boss,[username,email])
+  .populate("boss",["username","email"])
   .exec();
   return res.send(foundItem);
 })
 
 //新增課程
-router.post('/',async (req,res)=>{
+router.post("/",async (req,res)=>{
   // let {error} =courseValidation(req.body);
   // if(error) return res.status(400).send(error.details[0].message);
 
@@ -82,11 +82,11 @@ router.post('/',async (req,res)=>{
 });
 
 //透過course id新增課程
-router.post('/enroll/:_id',async(req,res)=>{
+router.post("/enroll/:_id",async(req,res)=>{
   let {_id}=req.params;
   try{
     let findItem=await Course.findOne({_id}).exec();
-    findItem.students.push(req.member._id);
+    findItem.students.push(req.user._id);
     await findItem.save();
     return res.send("註冊成功");
   }catch(e){
@@ -97,7 +97,7 @@ router.post('/enroll/:_id',async(req,res)=>{
 })
 
 //更新課程
-router.patch('/:_id',async(req,res)=>{
+router.patch("/:_id",async(req,res)=>{
   let{error} =courseValidation(req.body);
   if(error) return res.status(500).send("validate fail");
   let {_id}=req.params;
@@ -125,7 +125,7 @@ router.patch('/:_id',async(req,res)=>{
 })
 
 //刪除課程
-router.delete('/:_id',async(req,res)=>{
+router.delete("/:_id",async(req,res)=>{
   let {_id}=req.params;
   try{
     let findItem=await Course.findOne({_id}).exec();
