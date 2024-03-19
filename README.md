@@ -18,9 +18,14 @@ Member:
 Register:
 Enter your personal information and choose which character you want to be.
 
+
 Login:
 Enter your email and password.
 You will get a token to read/create/update/delete your data.
 
+Skill used:
+Frontend: HTML/CSS/JAVASCRIPT /React.js
+Database: MongoDB
+Backend: Node.js Express.js
 
 
