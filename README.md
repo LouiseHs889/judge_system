@@ -25,6 +25,7 @@ You will get a token to read/create/update/delete your data.
 
 Skill used:
 Frontend: HTML/CSS/JAVASCRIPT /React.js
+Using Restful API
 Database: MongoDB
 Backend: Node.js Express.js
 
